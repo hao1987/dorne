@@ -1,0 +1,44 @@
+#!/usr/bin/php
+# 
+# /var/www/PROJECT.com/.git/hooks
+# Set up pre-commit hook for auto-run phpunit tests after committing.
+# After finishing unit test, a coverage report will be auto-generated
+
+<?php
+// Hook configuration
+$project = 'PROJECT';
+$testSuite = 'phpunit.xml';
+$suiteName = 'generic_suite';
+$testResults = 'pub/results/phpunit/phpunit.xml';
+$coverage = 'pub/results/phpunit/coverage';
+
+// Tell the commiter what the hook is doing 
+echo PHP_EOL; echo '+ Starting unit tests...'.PHP_EOL;
+
+// Execute project unit tests via testsuite 
+exec('phpunit --log-junit '.$testResults.' -c '.$testSuite.' --testsuite '.$suiteName.' --coverage-html '.$coverage, $output, $returnCode);
+
+$coverage_status = array_pop($output);
+$coverage = $coverage_status.' at http://PROJECT.com/results/phpunit/coverage/index.html';
+
+// if the build failed, output a summary and fail 
+if ($returnCode !== 0) {
+     echo '+ Test suite for '.$project.' Failed:'.PHP_EOL;
+     // find the line with the summary; this might not be the last
+     while (($minimalTestSummary = array_pop($output)) !== null)
+     {
+         // output the status and abort the commit
+         echo '+++ '.$minimalTestSummary.PHP_EOL;
+     }
+
+     echo chr(27).'[0m'.PHP_EOL; // disable colors and add a line break
+     echo $coverage.PHP_EOL;
+     exit(1);
+}
+
+echo '+ All tests for '.$project.' passed.'.PHP_EOL;
+echo '+++ '.$output[count($output)-2].PHP_EOL;
+echo '+++ '.end($output).PHP_EOL;
+echo $coverage.PHP_EOL;
+exit(0);
+

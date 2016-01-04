@@ -1,0 +1,12 @@
+<? xml version = "1.0" encoding = "UTF-8" ?>
+<phpunit
+    colors="true"
+    bootstrap="tests/db_app.php"
+    verbose="true">
+    <testsuites>
+        <testsuite name="generic_suite">
+            <file>./tests/mysqldb.test.php</file>
+            <file>./tests/str.test.php</file>
+        </testsuite>
+    </testsuites>
+</phpunit>

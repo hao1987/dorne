@@ -1,0 +1,21 @@
+test_pdo:
+  -
+    id: 1
+    email: "john@gmail.com"
+    username: "john1987"
+    password: "123456"
+  -
+    id: 2
+    email: "kahleesi@gmail.com"
+    username: "kahleesi"
+    password: "123abc"
+  -
+    id: 3
+    email:
+    username: "Stark"
+    password: "123456789"
+  -
+    id: 4
+    email: "test@gmail.com"
+    username: "haha"
+    password: "123456789"
